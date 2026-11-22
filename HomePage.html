@@ -1,0 +1,70 @@
+# anjanarajan5690
+Anjana catering 
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Anjana Catering</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@400;600;800&display=swap"><style id="css">
+:root{--bg:#f3f6ee;--fg:#17261d;--mut:#5d6f63;--line:#bccab7;--lf:#1f5d3a;--on:#fff;--tu:#8f5a00;--hd:#f2b705;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a14;--fg:#e6efe3;--mut:#9fb3a5;--line:#34493b;--lf:#2f7a4f;--tu:#f2b705}}
+:root[data-theme="dark"]{--bg:#0f1a14;--fg:#e6efe3;--mut:#9fb3a5;--line:#34493b;--lf:#2f7a4f;--tu:#f2b705}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.55 "Mukta Malar","Noto Sans Tamil","Nirmala UI",Latha,system-ui,sans-serif;padding-bottom:90px}
+header{background:var(--lf);color:var(--on);border-bottom:5px dotted var(--hd);padding:20px 16px 16px}
+.w{max-width:560px;margin:0 auto;display:flex;gap:12px;align-items:flex-start}
+.w>div{flex:1}
+h1{font-size:30px;font-weight:800;line-height:1.15;margin:0}
+header p{margin:2px 0 0;opacity:.88}
+main{max-width:560px;margin:0 auto;padding:4px 16px 16px}
+h2{font-size:19px;font-weight:800;margin:26px 0 6px}
+.mut,.empty{color:var(--mut)}
+.it{display:flex;align-items:baseline;gap:8px;padding:9px 0}
+.it b{font-weight:600}
+.it i{flex:1;border-bottom:2px dotted var(--line);min-width:12px}
+.rt{font-weight:800;color:var(--tu);white-space:nowrap}
+button,.btn{font:inherit;font-weight:600;border:0;border-radius:999px;padding:8px 16px;background:var(--lf);color:var(--on);cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.g{background:none;color:inherit;border:1px solid currentColor}
+header .g{color:var(--on)}
+.q{display:inline-flex;align-items:center;gap:8px;align-self:center}
+.q button{padding:2px 12px}
+input,select,textarea{font:inherit;resize:vertical;width:100%;padding:10px 12px;margin:4px 0;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.r{display:flex;gap:8px}.r>*{flex:1}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--lf);color:var(--on);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:12px}
+.bar span{flex:1;font-weight:800}
+.bar button{background:var(--hd);color:#17261d}
+:focus-visible{outline:3px solid var(--hd);outline-offset:2px}
+</style></head><body><div id="app"></div><script id="state" type="application/json">{"phone":"9353403497","items":[{"id":"dz0k4g","name":"Full meals","rate":200,"date":"2026-11-23"},{"id":"ya2ywh","name":"Ladies finger sambar 500g","rate":80,"date":"2026-11-23"},{"id":"b2l1v0","name":"Rasam 500g","rate":80,"date":"2026-11-23"},{"id":"ayy98u","name":"Palya 250g","rate":80,"date":"2026-11-23"},{"id":"ew5mrj","name":"Usli 250g","rate":80,"date":"2026-11-23"},{"id":"ufha3j","name":"Anna 500g","rate":40,"date":"2026-11-23"},{"id":"okki3k","name":"Dinner ( pesarittu dosa with chutney)","rate":120,"date":"2026-11-23"}],"addr":"","map":""}</script><script id="code">
+const $=s=>document.querySelector(s),S=JSON.parse($('#state').textContent);S.addr=S.addr||'';S.map=S.map||'';
+const esc=t=>String(t).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const p2=n=>String(n).padStart(2,'0'),ymd=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+const today=ymd(new Date());
+const fd=d=>new Date(d+'T00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+let view='menu',cart={},owner=false,art=null,dirty=false,lt='d',ld=today,B={name:'',phone:'',date:today,addr:'',notes:''};
+const rid=()=>Math.random().toString(36).slice(2,8);
+const srt=()=>S.items.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')||a.name.localeCompare(b.name));
+const lines=()=>S.items.filter(i=>cart[i.id]).map(i=>({...i,q:cart[i.id]}));
+const total=()=>lines().reduce((s,i)=>s+i.q*i.rate,0),count=()=>lines().reduce((s,i)=>s+i.q,0);
+const msg=t=>{const m=$('#msg');if(m)m.textContent=t};
+const enc=encodeURIComponent,okUrl=u=>(u||'').toLowerCase().startsWith('https://');
+const mapsLink=a=>'https://www.google.com/maps/search/?api=1&query='+enc(a);
+const shopMap=()=>okUrl(S.map)?S.map:(S.addr?mapsLink(S.addr):'');
+const findUs=()=>S.addr||okUrl(S.map)?`<h2>Find us</h2>${S.addr?`<p style="white-space:pre-line">${esc(S.addr)}</p>`:''}<p><a class="btn" target="_blank" rel="noopener" href="${esc(shopMap())}">Open in Maps</a></p>`:'';
+
+const row=i=>{const n=cart[i.id]||0;return `<div class="it"><b>${esc(i.name)}</b><i></i><span class="rt">₹${i.rate}</span><span class="q">${n?`<button class="g" data-a="-" data-i="${i.id}" aria-label="Remove one">−</button><span>${n}</span><button data-a="+" data-i="${i.id}" aria-label="Add one">+</button>`:`<button data-a="+" data-i="${i.id}">Add</button>`}</span></div>`};
+
+function menu(){
+  const a=srt().filter(i=>!i.date||i.date>=today),t=a.filter(i=>i.date===today),u=a.filter(i=>i.date>today),r=a.filter(i=>!i.date);
+  if(!a.length)return '<h2>Menu</h2><p class="empty">The menu hasn’t been added yet.</p>';
+  let h='<h2>Today’s menu ('+fd(today)+')</h2>'+(t.length?t.map(row).join(''):'<p class="empty">Today’s menu isn’t posted yet.</p>');
+  [...new Set(u.map(i=>i.date))].forEach(d=>h+='<h2>'+fd(d)+'</h2>'+u.filter(i=>i.date===d).map(row).join(''));
+  if(r.length)h+='<h2>Always available</h2>'+r.map(row).join('');
+  return h;
+}
+
+function wa(){
+  const L=lines().map(i=>'• '+i.name+' × '+i.q+' = ₹'+i.q*i.rate);
+  const m=['*Anjana Catering: new booking*','Name: '+B.name,'Phone: '+B.phone,'Date: '+B.date,''].concat(L,['','Total: ₹'+total()],B.addr?['Address: '+B.addr,'Map: '+mapsLink(B.addr)]:[],B.notes?['Notes: '+B.notes]:[]).join('\n');
+  return 'https://wa.me/'+S.phone+'?text='+encodeURIComponent(m);
+}
+
+function form(){
+  return `<p><button class="g" data-a="back">← Menu</button></p><h2>Your order</h2>`+
+  lines().map(i=>`<div class="it"><b>${esc(i.name)} × ${i.q}</b><
